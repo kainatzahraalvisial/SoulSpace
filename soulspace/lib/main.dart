@@ -5,7 +5,7 @@ import 'src/ui/screens/splash_screen.dart';
 import 'src/ui/screens/onboarding_screen.dart';
 import 'src/ui/screens/auth_screen.dart';
 import 'src/utils/app_colors.dart';
-import 'src/ui/screens/home_screen.dart';
+import 'src/ui/screens/main_page.dart';
 
 void main() {
   runApp(const SoulSpaceApp());
@@ -52,9 +52,9 @@ class SoulSpaceApp extends StatelessWidget {
           initialRoute: '/',
           routes: {
             '/': (context) => const SplashScreen(),
-            '/onboarding': (context) => const OnboardingScreen(),
+            '/onboarding': (context,) => const OnboardingScreen(),
             '/auth': (context) => const AuthScreen(),
-            '/home': (context) => const HomeScreen(username: 'Jane'),
+            '/home': (context) => const MainPage(username: "Jane"),
           },
         );
       },

@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
     )..repeat(reverse: true);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(seconds: 7), () {
+      Future.delayed(const Duration(seconds: 3), () {
         if (!mounted) return;
         Navigator.of(context).pushReplacementNamed('/onboarding');
       });
