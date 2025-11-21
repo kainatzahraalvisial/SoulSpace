@@ -1,4 +1,3 @@
-// breathing_page.dart → FINAL UPGRADED VERSION (continuous breathing + extra static star)
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class BreathingPage extends StatefulWidget {
 class _BreathingPageState extends State<BreathingPage>
     with TickerProviderStateMixin {
   late final AnimationController _rotateController;
-  late final AnimationController _breathController; // now runs forever
+  late final AnimationController _breathController; 
   late final Animation<double> _scaleAnimation;
 
   Timer? _sessionTimer;
@@ -37,17 +36,15 @@ class _BreathingPageState extends State<BreathingPage>
     _rotateController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     _breathController = AnimationController(vsync: this, duration: const Duration(seconds: cycleTotal));
 
-    // Continuous breathing scale
     _scaleAnimation = TweenSequence<double>(
       [
-        TweenSequenceItem(tween: Tween<double>(begin: 1.0, end: 1.25).chain(CurveTween(curve: Curves.easeInOut)), weight: inhaleSec.toDouble()),
+        TweenSequenceItem(tween: Tween<double>(begin: 1.0, end: 1.15).chain(CurveTween(curve: Curves.easeInOut)), weight: inhaleSec.toDouble()),
         TweenSequenceItem(tween: ConstantTween<double>(1.25), weight: holdAfterInhaleSec.toDouble()),
-        TweenSequenceItem(tween: Tween<double>(begin: 1.25, end: 1.0).chain(CurveTween(curve: Curves.easeInOut)), weight: exhaleSec.toDouble()),
+        TweenSequenceItem(tween: Tween<double>(begin: 1.15, end: 1.0).chain(CurveTween(curve: Curves.easeInOut)), weight: exhaleSec.toDouble()),
         TweenSequenceItem(tween: ConstantTween<double>(1.0), weight: holdAfterExhaleSec.toDouble()),
       ],
     ).animate(_breathController);
 
-    // Start breathing IMMEDIATELY and FOREVER
     _breathController.repeat();
   }
 
@@ -66,9 +63,10 @@ class _BreathingPageState extends State<BreathingPage>
       _running = true;
       _paused = false;
     });
-    _rotateController.repeat(); // rotation starts only when session begins
+    _rotateController.repeat(); 
 
-    _sessionTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+    _sessionTimer = Timer.periodic(const Duration(seconds: 1), (t) 
+    {
       if (!mounted) return;
       setState(() {
         _remainingSeconds--;
@@ -145,11 +143,18 @@ class _BreathingPageState extends State<BreathingPage>
                 // Header
                 Row(
                   children: [
-                    GestureDetector(
-                      onTap: () => Navigator.maybePop(context),
-                      child: const Padding(padding: EdgeInsets.all(8), child: Icon(Icons.arrow_back, color: Colors.white, size: 26)),
-                    ),
-                    const SizedBox(width: 10),
+                   GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.lightPink,    
+                          ),
+                          child: const Icon(Icons.arrow_back_rounded, color: Colors.black, size: 26),
+                        ),
+                      ),
+                    const SizedBox(width: 16),
                     Text("Breathing Exercise", style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.white)),
                     const Spacer(),
                     Container(
@@ -162,20 +167,17 @@ class _BreathingPageState extends State<BreathingPage>
 
                 const SizedBox(height: 26),
 
-                // Flower + Breathing + Rotation + Extra Static Star
                 Expanded(
                   child: Center(
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        // NEW: Extra static star (does NOT rotate or breathe)
                         Positioned(
                           top: flowerSize * 0.05,
                           left: flowerSize * 0.38,
                           child: Icon(Icons.star_rounded, size: flowerSize * 0.07, color: AppColors.white.withValues(alpha: 0.8)),
                         ),
 
-                        // Breathing + Rotating Flower
                         AnimatedBuilder(
                           animation: Listenable.merge([_rotateController, _breathController]),
                           builder: (_, __) {
@@ -189,11 +191,9 @@ class _BreathingPageState extends State<BreathingPage>
                                   child: Stack(
                                     alignment: Alignment.center,
                                     children: [
-                                      // Two rotating stars
                                       Positioned(left: flowerSize * 0.12, top: flowerSize * 0.08, child: Icon(Icons.star_rounded, size: flowerSize * 0.06, color: AppColors.white.withValues(alpha: 0.7))),
                                       Positioned(right: flowerSize * 0.12, bottom: flowerSize * 0.08, child: Icon(Icons.star_rounded, size: flowerSize * 0.05, color: AppColors.white.withValues(alpha: 0.6))),
 
-                                      // Your beautiful flower
                                       SvgPicture.asset("assets/svg/flower_outline.svg", width: flowerSize, height: flowerSize),
                                     ],
                                   ),
@@ -209,7 +209,6 @@ class _BreathingPageState extends State<BreathingPage>
 
                 const SizedBox(height: 18),
 
-                // Phase + seconds
                 Center(
                   child: AnimatedBuilder(
                     animation: _breathController,
@@ -237,7 +236,6 @@ class _BreathingPageState extends State<BreathingPage>
 
                 const SizedBox(height: 30),
 
-                // Controls (unchanged)
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -264,6 +262,7 @@ class _BreathingPageState extends State<BreathingPage>
                           ),
                           child: Text("Pause", style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
                         ),
+
                         const SizedBox(width: 16),
                         OutlinedButton(
                           onPressed: _stopSession,
@@ -274,7 +273,9 @@ class _BreathingPageState extends State<BreathingPage>
                           ),
                           child: Text("Stop", style: GoogleFonts.poppins(color: AppColors.white)),
                         ),
-                      ] else ...[
+
+                      ] 
+                      else ...[
                         ElevatedButton(
                           onPressed: _resumeSession,
                           style: ElevatedButton.styleFrom(
@@ -285,6 +286,7 @@ class _BreathingPageState extends State<BreathingPage>
                           ),
                           child: Text("Resume", style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
                         ),
+
                         const SizedBox(width: 16),
                         OutlinedButton(
                           onPressed: _stopSession,

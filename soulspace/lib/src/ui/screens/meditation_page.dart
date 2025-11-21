@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'calm_page.dart';
 import '../../utils/app_colors.dart';
 import 'breathing_page.dart';
-//import '../calm/calm_page.dart';
-//import '../sleep/sleep_page.dart';
-//import '../focus/focus_page.dart';
+import 'sleep_page.dart';
+import 'focus_page.dart';
 
 class MeditationPage extends StatelessWidget {
   const MeditationPage({super.key});
@@ -20,7 +19,7 @@ class MeditationPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // HEADER
+              
               Text(
                 "Meditation",
                 style: GoogleFonts.poppins(
@@ -29,7 +28,7 @@ class MeditationPage extends StatelessWidget {
                   color: AppColors.black,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 10),
               Text(
                 "Choose a session to begin",
                 style: GoogleFonts.poppins(
@@ -39,7 +38,6 @@ class MeditationPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // GRID
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
@@ -47,7 +45,6 @@ class MeditationPage extends StatelessWidget {
                   mainAxisSpacing: 14,
                   childAspectRatio: 0.70,
                   children: [
-                    // BREATHING
                     _buildMeditationCard(
                       title: "Breathing",
                       color: const Color(0xFFF4B1B7),
@@ -62,48 +59,45 @@ class MeditationPage extends StatelessWidget {
                       },
                     ),
 
-                    // CALM
                     _buildMeditationCard(
                       title: "Calm",
                       color: const Color(0xFFF3D6C8),
                       imagePath: "assets/images/calm.png",
                       onStart: () {
-                        /*Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const CalmPage(),
                           ),
-                        );*/
+                        );
                       },
                     ),
 
-                    // SLEEP
                     _buildMeditationCard(
                       title: "Sleep",
                       color: const Color(0xFFD5BFFF),
                       imagePath: "assets/images/sleep.png",
                       onStart: () {
-                        /*Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const SleepPage(),
                           ),
-                        );*/
+                        );
                       },
                     ),
 
-                    // FOCUS
                     _buildMeditationCard(
                       title: "Focus",
                       color: const Color(0xFFD0ECFF),
                       imagePath: "assets/images/focus.png",
                       onStart: () {
-                        /*Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const FocusPage(),
                           ),
-                        );*/
+                        );
                       },
                     ),
                   ],
@@ -115,8 +109,6 @@ class MeditationPage extends StatelessWidget {
       ),
     );
   }
-
-  // ------------------------------ CARD WIDGET ------------------------------ //
 
   Widget _buildMeditationCard({
     required String title,
@@ -132,12 +124,10 @@ class MeditationPage extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // CONTENT
           Column(
             children: [
               const SizedBox(height: 10),
 
-              // IMAGE
               Expanded(
                 flex: 8,
                 child: Padding(
@@ -151,7 +141,6 @@ class MeditationPage extends StatelessWidget {
 
               const SizedBox(height: 6),
 
-              // TITLE
               Center(
                 child: Text(
                   title,
@@ -163,11 +152,11 @@ class MeditationPage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 45), // space for floating button
+              const SizedBox(height: 45), 
+              
             ],
           ),
 
-          // FLOATING BUTTON
           Positioned(
             bottom: 12,
             right: 12,

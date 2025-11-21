@@ -18,7 +18,6 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 2;
 
   Widget withNavPadding(Widget page) {
-    // keep bottom space so content doesn't sit under nav
     return Padding(
       padding: const EdgeInsets.only(bottom: 80),
       child: page,
@@ -31,26 +30,22 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _pages.addAll([
-      withNavPadding(const Placeholder()), // Journal (placeholder)
-      withNavPadding(const MeditationPage()), // Meditation
-      withNavPadding(HomeScreen(username: widget.username)), // Home
-      withNavPadding(const Placeholder()), // Chatbot
-      withNavPadding(const Placeholder()), // Insights
+      withNavPadding(const Placeholder()), 
+      withNavPadding(const MeditationPage()), 
+      withNavPadding(HomeScreen(username: widget.username)), 
+      withNavPadding(const Placeholder()), 
+      withNavPadding(const Placeholder()), 
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // no extendBody (we intentionally removed it)
-      //extendBody: true,
+      
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          // ── IMPORTANT ──
-          // When on Home tab (index == 2) show the Home wallpaper at the bottom
-          // so the nav can visually blend with it. For other tabs we don't render the wallpaper.
-          // BACKGROUND LAYER
+         
 Positioned.fill(
   child: _currentIndex == 2
       ? Image.asset(
@@ -58,18 +53,17 @@ Positioned.fill(
           fit: BoxFit.cover,
         )
       : Container(
-          color: AppColors.lightBackground, // choose your soft pink / beige
+          color: AppColors.lightBackground, 
         ),
 ),
 
 
-          // pages (only one visible, others preserved)
+         
           IndexedStack(
             index: _currentIndex,
             children: _pages,
           ),
 
-          // overlayed bottom nav — always on top of page content
           Positioned(
             left: 0,
             right: 0,
@@ -77,7 +71,6 @@ Positioned.fill(
             child: SafeArea(
               top: false,
               child: Padding(
-                // REMOVE left/right padding so nav touches screen edges
                 padding: EdgeInsets.zero,
                 child: Material(
                   color: Colors.transparent,

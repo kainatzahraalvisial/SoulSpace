@@ -14,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedMood = "";
 
   final List<String> weekdays = ["S", "M", "T", "W", "T", "F", "S"];
-  final int currentWeekday = DateTime.now().weekday; // 1=Mon ... 7=Sun
+  final int currentWeekday = DateTime.now().weekday; 
 
   final List<Map<String, String>> moodEmojis = [
     {'name': 'happy', 'path': 'assets/images/happy.png'},
@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _saveMood(String moodName) {
     setState(() => selectedMood = moodName);
 
-    // Show a short SnackBar as confirmation
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Mood saved: $moodName"),
@@ -44,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBody: true,
       body: Stack(
         children: [
-          // BACKGROUND IMAGE (90% OPACITY)
           Positioned.fill(
             child: Opacity(
               opacity: 0.9,
@@ -55,24 +53,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // CONTENT
           SafeArea(
             child: Column(
               children: [
-                // FIXED HEADER (NOT SCROLLABLE)
+                
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header Row: avatar + calendar
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
                             onTap: () {
-                              // navigate to profile (hook up in your router)
                               Navigator.of(context).pushNamed('/profile');
                             },
                             child: const CircleAvatar(
@@ -87,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 18),
 
-                      // Greeting
                       Text(
                         "Hi, ${widget.username}!",
                         style: GoogleFonts.poppins(
@@ -108,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
-                // SCROLLABLE BODY (header fixed)
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -119,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           const SizedBox(height: 10),
 
-                          // Weekday row (S M T W T F S) with today's highlight
+                         
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: List.generate(7, (index) {
@@ -148,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 20),
 
 
-                          // Emoji mood row
                           SizedBox(
                             height: 65,
                             child: ListView.separated(
@@ -186,7 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 25),
 
-                          // Quote card (forest green)
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(20),
@@ -209,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 20),
 
-                          // Feature cards
+                         
                           _buildFeatureCard(
                             title: "How was your day?",
                             buttonText: "Write Journal",
@@ -240,13 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-
-      // reusable nav bar from widgets folder
       
     );
   }
 
-  // FEATURE CARD BUILDER
   Widget _buildFeatureCard({
     required String title,
     required String buttonText,
@@ -264,7 +252,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Text + Button
           Expanded(
             flex: 2,
             child: Column(
@@ -315,12 +302,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-
-          // Image
           const SizedBox(width: 10),
           Expanded(
             flex: 1,
-            child: Image.asset(image, height: 120),
+            child: Image.asset(image, height: 140),
           ),
         ],
       ),
