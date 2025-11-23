@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:audioplayers/audioplayers.dart';  
+import 'package:audioplayers/audioplayers.dart';
 import '../../utils/app_colors.dart';
 
 class CalmTrack {
@@ -21,16 +21,8 @@ class _CalmPageState extends State<CalmPage> {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   final List<CalmTrack> tracks = [
-    CalmTrack(
-      "Body Scan Meditation",
-      "2:45 min • Release tension",
-      "audios/body_scan.mp3",
-    ),
-    CalmTrack(
-      "Inner Peace Meditation",
-      "10:05 min • Cultivate warmth & inner peace",
-      "audios/Inner-peace.mp3",
-    ),
+    CalmTrack("Body Scan Meditation", "2:45 min • Release tension", "audios/body_scan.mp3"),
+    CalmTrack("Inner Peace Meditation", "10:05 min • Cultivate warmth & inner peace", "audios/Inner-peace.mp3"),
   ];
 
   int currentIndex = 0;
@@ -43,17 +35,16 @@ class _CalmPageState extends State<CalmPage> {
   void initState() {
     super.initState();
     _setupListeners();
+    _loadTrack(tracks[0]); // ← Load first track on open (but don't play)
   }
 
   void _setupListeners() {
-   _audioPlayer.onPlayerStateChanged.listen((state) {
-    if (!mounted) return;
-    setState(() {
-      isPlaying = state == PlayerState.playing;
-      if (state == PlayerState.completed) {
-        isPlaying = false; 
-      }
-    });
+    _audioPlayer.onPlayerStateChanged.listen((state) {
+      if (!mounted) return;
+      setState(() {
+        isPlaying = state == PlayerState.playing;
+        isLoading = false;
+      });
     });
 
     _audioPlayer.onDurationChanged.listen((d) {
@@ -66,55 +57,53 @@ class _CalmPageState extends State<CalmPage> {
       setState(() => position = p);
     });
 
+    // Remove auto-next → meditations should STOP when finished
     _audioPlayer.onPlayerComplete.listen((_) {
-      _next();
+      if (!mounted) return;
+      setState(() => isPlaying = false);
     });
   }
 
   Future<void> _loadTrack(CalmTrack track) async {
     final index = tracks.indexOf(track);
-    if (currentIndex == index && isPlaying) {
-    await _audioPlayer.pause();
-    return;
-    }
+    if (currentIndex == index && !isLoading) return;
 
     setState(() {
       currentIndex = index;
       isLoading = true;
+      isPlaying = false;
     });
 
     try {
+      await _audioPlayer.stop();
       await _audioPlayer.setSource(AssetSource(track.assetPath));
-      if (isPlaying) await _audioPlayer.resume();
-    } catch (e) {
-      setState(() => isLoading = false);
+      await _audioPlayer.setReleaseMode(ReleaseMode.stop); // No loop
+    } 
+    finally {
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
   void _playPause() async {
-    if (isLoading) return;
-    if (isPlaying) {
-      await _audioPlayer.pause();
-    } else {
-      await _audioPlayer.resume();
-    }
-  }
+  if (isLoading) return;
 
+  if (isPlaying) {
+    await _audioPlayer.pause();
+  } else {
+    await _audioPlayer.play(AssetSource(tracks[currentIndex].assetPath));
+  }
+}
   void _previous() async {
     if (position.inSeconds > 3) {
       await _audioPlayer.seek(Duration.zero);
     } else if (currentIndex > 0) {
-      currentIndex--;
-      await _loadTrack(tracks[currentIndex]);
-      if (isPlaying) await _audioPlayer.resume();
+      await _loadTrack(tracks[--currentIndex]);
     }
   }
 
   void _next() async {
     if (currentIndex < tracks.length - 1) {
-      currentIndex++;
-      await _loadTrack(tracks[currentIndex]);
-      if (isPlaying) await _audioPlayer.resume();
+      await _loadTrack(tracks[++currentIndex]);
     }
   }
 
@@ -133,21 +122,14 @@ class _CalmPageState extends State<CalmPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset("assets/images/calm_bg.jpg", fit: BoxFit.cover),
-          ),
-
+          Positioned.fill(child: Image.asset("assets/images/calm_bg.jpg", fit: BoxFit.cover)),
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.lightpurple.withValues(alpha: 0.35),
-                    Colors.transparent,
-                    AppColors.yellow.withValues(alpha: 0.25),
-                  ],
+                  colors: [AppColors.lightpurple.withValues(alpha: 0.35), Colors.transparent, AppColors.yellow.withValues(alpha: 0.25)],
                 ),
               ),
             ),
@@ -156,6 +138,7 @@ class _CalmPageState extends State<CalmPage> {
           SafeArea(
             child: Column(
               children: [
+                // Header
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -169,38 +152,27 @@ class _CalmPageState extends State<CalmPage> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      Text(
-                        "Calm & Relax",
-                        style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white),
-                      ),
+                      Text("Calm & Relax", style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white)),
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 10),
 
+                // Track List
                 Expanded(
                   child: ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     itemCount: tracks.length,
-                    itemBuilder: (ctx, i) {
+                    itemBuilder: (_, i) {
                       final t = tracks[i];
                       final selected = i == currentIndex;
                       return GestureDetector(
-                        onTap: () {
-                          currentIndex = i;
-                          _loadTrack(t);
-                          if (isPlaying) _audioPlayer.resume();
-                          setState(() {});
-                        },
+                        onTap: () => _loadTrack(t),
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           padding: const EdgeInsets.all(18),
                           decoration: BoxDecoration(
-                            color: selected
-                                ? AppColors.warmPink.withValues(alpha: 0.3)
-                                : Colors.white.withValues(alpha: 0.15),
+                            color: selected ? AppColors.warmPink.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: selected ? AppColors.warmPink : Colors.transparent, width: 2),
                           ),
@@ -209,10 +181,7 @@ class _CalmPageState extends State<CalmPage> {
                               Container(
                                 width: 58,
                                 height: 58,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: AppColors.warmPink.withValues(alpha: 0.4),
-                                ),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.warmPink.withValues(alpha: 0.4)),
                                 child: const Icon(Icons.music_note_rounded, color: Colors.white, size: 32),
                               ),
                               const SizedBox(width: 16),
@@ -228,7 +197,7 @@ class _CalmPageState extends State<CalmPage> {
                               if (selected)
                                 isLoading
                                     ? const SizedBox(width: 36, height: 36, child: CircularProgressIndicator(strokeWidth: 3, valueColor: AlwaysStoppedAnimation(Colors.white)))
-                                    : Icon(isPlaying ? Icons.pause_circle : Icons.play_circle, color: Colors.white, size: 36),
+                                    : Icon(isPlaying ? Icons.pause_circle_filled : Icons.play_circle_fill, color: Colors.white, size: 36),
                             ],
                           ),
                         ),
@@ -237,17 +206,14 @@ class _CalmPageState extends State<CalmPage> {
                   ),
                 ),
 
+                // Bottom Player
                 Container(
                   padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.45),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-                  ),
+                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: const BorderRadius.vertical(top: Radius.circular(32))),
                   child: Column(
                     children: [
                       Text(track.title, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white)),
                       Text(track.subtitle, style: const TextStyle(color: Colors.white60, fontSize: 14)),
-
                       const SizedBox(height: 14),
 
                       SliderTheme(
@@ -276,16 +242,11 @@ class _CalmPageState extends State<CalmPage> {
                         ),
                       ),
 
-                      const SizedBox(height: 16),
-
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.skip_previous_rounded, size: 48),
-                            color: Colors.white70,
-                            onPressed: _previous,
-                          ),
+                          IconButton(icon: const Icon(Icons.skip_previous_rounded, size: 48), color: Colors.white70, onPressed: _previous),
                           const SizedBox(width: 32),
                           GestureDetector(
                             onTap: _playPause,
@@ -296,11 +257,7 @@ class _CalmPageState extends State<CalmPage> {
                             ),
                           ),
                           const SizedBox(width: 32),
-                          IconButton(
-                            icon: const Icon(Icons.skip_next_rounded, size: 48),
-                            color: Colors.white70,
-                            onPressed: _next,
-                          ),
+                          IconButton(icon: const Icon(Icons.skip_next_rounded, size: 48), color: Colors.white70, onPressed: _next),
                         ],
                       ),
                     ],

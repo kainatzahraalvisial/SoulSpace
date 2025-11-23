@@ -91,14 +91,15 @@ class _FocusPageState extends State<FocusPage> {
   }
 
   void _togglePlayPause() async {
-  if (isLoading) return;
+    if (isLoading) return;
 
-  if (isPlaying) {
-    await _audioPlayer.pause();
-  } else {
-    await _audioPlayer.resume(); 
+    if (isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      // This line fixes the "first play doesn't work" bug
+      await _audioPlayer.play(AssetSource(tracks[currentIndex].asset));
+    }
   }
-}
 
   void _startTimer() {
     _focusTimer?.cancel();

@@ -1,9 +1,9 @@
-// lib/src/ui/screens/main_page.dart
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'meditation_page.dart';
 import '../widgets/custom_navbar.dart';
 import '../../utils/app_colors.dart';
+import 'insights_page.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
       withNavPadding(const MeditationPage()), 
       withNavPadding(HomeScreen(username: widget.username)), 
       withNavPadding(const Placeholder()), 
-      withNavPadding(const Placeholder()), 
+      withNavPadding(const InsightsPage()), 
     ]);
   }
 
