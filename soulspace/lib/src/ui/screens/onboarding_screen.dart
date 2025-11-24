@@ -55,7 +55,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // ────── PAGE VIEW ──────
+         
             PageView.builder(
               controller: _controller,
               onPageChanged: (i) => setState(() => _currentPage = i),
@@ -66,11 +66,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                 return Stack(
                   children: [
-                    // ────── PATTERN 1: Bottom-left, larger, fully visible ──────
+                 
                     if (patternPos == "bottom-left")
                       Positioned(
-                        bottom: -20.h,  // Pull up so full image is visible
-                        left: -140.w,    // Pull left
+                        bottom: -20.h,  
+                        left: -140.w,    
                         child: Image.asset(
                           page["pattern"]!,
                           width: 400.w,
@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
 
-                    // ────── PATTERN 2: Full-width bottom, larger, fully inside ──────
+                  
                     if (patternPos == "bottom-full")
                       Positioned(
                         bottom: 0,
@@ -87,12 +87,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         right: 0,
                         child: Image.asset(
                           page["pattern"]!,
-                          height: 450.h,  // Increased size
+                          height: 450.h, 
                           fit: BoxFit.cover,
                         ),
                       ),
 
-                    // ────── PATTERN 3: Full-width top, larger, fully visible ──────
+                   
                     if (patternPos == "top-full")
                       Positioned(
                         top: 0,
@@ -100,18 +100,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         right: 0,
                         child: Image.asset(
                           page["pattern"]!,
-                          height: 490.h,  // Increased size
+                          height: 490.h,  
                           fit: BoxFit.cover,
                         ),
                       ),
 
-                    // ────── MAIN CONTENT (Centered, on top of pattern) ──────
+                   
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 40.w),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Top spacer for top pattern
+                         
                           if (patternPos == "top-full") SizedBox(height: 140.h),
 
                           Image.asset(
@@ -147,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                           SizedBox(height: 40.h),
 
-                          // ────── NEXT / GET STARTED BUTTON ──────
+                          
                           ElevatedButton(
                             onPressed: _nextPage,
                             style: ElevatedButton.styleFrom(
@@ -163,7 +163,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ),
 
-                          // ────── LOGIN LINK (Last page only) ──────
+                          
                           if (_currentPage == 2) ...[
                             SizedBox(height: 16.h),
                             GestureDetector(
@@ -179,7 +179,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ],
 
-                          SizedBox(height: 60.h), // Extra space for bottom pattern
+                          SizedBox(height: 60.h), 
                         ],
                       ),
                     ),
@@ -188,7 +188,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
             ),
 
-            // ────── PAGE INDICATOR (3 DOTS) ──────
+            
             Positioned(
               bottom: 40.h,
               left: 0,

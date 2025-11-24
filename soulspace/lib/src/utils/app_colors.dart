@@ -17,6 +17,16 @@ class AppColors {
   static const Color peach = Color(0xFFFAD4BF);
   static const Color lightPink = Color(0xFFFFEAE9);
   static const Color gray = Color(0xFF888888);
+  static const Color lightBackground = Color(0xFFFCEEEE); 
+  static const Color lightpurple = Color(0xFFC177F2);
+  static const Color yellow = Color(0xFFFDD214);
+  static const Color purple = Color(0xFFF2DCF1);
+  static const Color darkpurple = Color(0xFF660D8C);
+  static const Color shockingPink = Color(0xFFC8388D);
+  static const Color deepPurple =  Color(0xFF4E1773);
+  static const Color lightyellow = Color(0xFFFFFF91);
+  static const Color lightblue = Color(0xFFAED2E8);
+
 
 
 

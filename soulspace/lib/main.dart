@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'src/ui/screens/chatbot.dart';           // ← Your Chatbot page
 import 'src/ui/screens/journal_page.dart';       // ← ADDED: Journal page import
 import 'src/utils/app_colors.dart';
+import 'src/ui/screens/main_page.dart';
 
 void main() {
   runApp(const SoulSpaceApp());
@@ -41,8 +42,14 @@ class SoulSpaceApp extends StatelessWidget {
             fontFamily: 'Poppins',
           ),
 
-          // Simple tester home so you can quickly jump to Chatbot OR Journal
-          home: const QuickTestHome(),
+          // ────── ROUTES ──────
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashScreen(),
+            '/onboarding': (context,) => const OnboardingScreen(),
+            '/auth': (context) => const AuthScreen(),
+            '/home': (context) => const MainPage(username: "Jane"),
+          },
         );
       },
     );

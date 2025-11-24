@@ -1,156 +1,313 @@
-// src/ui/screens/home_screen.dart
-import 'dart:ui'; // <-- REQUIRED FOR ImageFilter
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../utils/app_colors.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final String username;
   const HomeScreen({super.key, required this.username});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true, // Allows content behind nav bar
-      body: Stack(
-        children: [
-          // ────── 1. BASE GRADIENT (Like your proposal image) ──────
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFE8F5FF), // Light blue top
-                  Color(0xFFFCE4EC), // Soft pink middle
-                  Color(0xFFE1F5FE), // Light cyan bottom
-                ],
-                stops: [0.0, 0.5, 1.0],
-              ),
-            ),
-          ),
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
-          // ────── 2. THREE BLURRED CIRCLES (Pinterest video style) ──────
-          // Circle 1: Top-left, large, soft pink
-          Positioned(
-            top: -180.h,
-            left: -180.w,
-            child: _buildBlurCircle(
-              size: 500.w,
-              color: const Color(0xFFFFBBB2).withValues(alpha: 0.25), // withOpacity → withValues
-              blur: 80,
-            ),
-          ),
+class _HomeScreenState extends State<HomeScreen> {
+  String selectedMood = "";
 
-          // Circle 2: Bottom-right, larger, warm pink
-          Positioned(
-            bottom: -220.h,
-            right: -220.w,
-            child: _buildBlurCircle(
-              size: 600.w,
-              color: const Color(0xFFFF9B92).withValues(alpha: 0.30),
-              blur: 100,
-            ),
-          ),
+  final List<String> weekdays = ["S", "M", "T", "W", "T", "F", "S"];
+  final int currentWeekday = DateTime.now().weekday; 
 
-          // Circle 3: Center-left, medium, sage green
-          Positioned(
-            top: 150.h,
-            left: -100.w,
-            child: _buildBlurCircle(
-              size: 400.w,
-              color: const Color(0xFF818C69).withValues(alpha: 0.20),
-              blur: 70,
-            ),
-          ),
+  final List<Map<String, String>> moodEmojis = [
+    {'name': 'happy', 'path': 'assets/images/happy.png'},
+    {'name': 'sad', 'path': 'assets/images/sad.png'},
+    {'name': 'angry', 'path': 'assets/images/angry.png'},
+    {'name': 'worried', 'path': 'assets/images/worried.png'},
+    {'name': 'upset', 'path': 'assets/images/upset.png'},
+    {'name': 'nervous', 'path': 'assets/images/nervous.png'},
+  ];
 
-          // ────── 3. MAIN CONTENT (Will be layered next) ──────
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20.h),
-                  Text(
-                    "Hi, $username!",
-                    style: TextStyle(
-                      fontSize: 28.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.black,
-                    ),
-                  ),
-                  Text(
-                    "How are you feeling today?",
-                    style: TextStyle(fontSize: 16.sp, color: AppColors.lightBlack),
-                  ),
-                  const Spacer(),
-                  Center(
-                    child: Text(
-                      "Background Ready!",
-                      style: TextStyle(fontSize: 24.sp, color: AppColors.black.withValues(alpha: 0.8)),
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+  void _saveMood(String moodName) {
+    setState(() => selectedMood = moodName);
 
-      // ────── BOTTOM NAVIGATION BAR (5 tabs, Home in center) ──────
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: 2,
-          selectedItemColor: AppColors.forest,
-          unselectedItemColor: AppColors.lightBlack,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          onTap: (index) {
-            // Later: Navigate to screens
-            print("Nav to index: $index");
-          },
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-            BottomNavigationBarItem(icon: Icon(Icons.book_outlined), label: 'Journal'),
-            BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.self_improvement), label: 'Meditate'),
-            BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Mood'),
-          ],
-        ),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Mood saved: $moodName"),
+        backgroundColor: AppColors.softCoral.withValues(alpha: 0.95),
+        duration: const Duration(seconds: 1),
       ),
     );
   }
 
-  // ────── HELPER: Blurred Circle (Reusable) ──────
-  Widget _buildBlurCircle({
-    required double size,
-    required Color color,
-    required double blur,
-  }) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: ClipOval(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-          child: Container(
-            color: color,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.9,
+              child: Image.asset(
+                'assets/images/bg.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
+
+          SafeArea(
+            child: Column(
+              children: [
+                
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed('/profile');
+                            },
+                            child: const CircleAvatar(
+                              radius: 26,
+                              backgroundImage:
+                                  AssetImage('assets/images/avatar.png'),
+                            ),
+                          ),
+                          Icon(Icons.calendar_today_outlined,
+                              color: AppColors.black, size: 22),
+                        ],
+                      ),
+                      const SizedBox(height: 18),
+
+                      Text(
+                        "Hi, ${widget.username}!",
+                        style: GoogleFonts.poppins(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.black,
+                        ),
+                      ),
+                      Text(
+                        "How are you feeling today?",
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+
+                         
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(7, (index) {
+                              final bool isToday = (index == (currentWeekday % 7));
+                              return Container(
+                                width: 36,
+                                height: 36,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: isToday
+                                      ? AppColors.softCoral.withValues(alpha: 0.95)
+                                      : AppColors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Text(
+                                  weekdays[index],
+                                  style: GoogleFonts.poppins(
+                                    fontWeight:
+                                        isToday ? FontWeight.w600 : FontWeight.w400,
+                                    color: AppColors.black,
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                          const SizedBox(height: 20),
+
+
+                          SizedBox(
+                            height: 65,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: moodEmojis.length,
+                              separatorBuilder: (_, __) => const SizedBox(width: 15),
+                              itemBuilder: (context, index) {
+                                final mood = moodEmojis[index];
+                                final isSelected = selectedMood == mood['name'];
+                                return GestureDetector(
+                                  onTap: () => _saveMood(mood['name']!),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: isSelected
+                                          ? [
+                                              BoxShadow(
+                                                color: AppColors.forest.withValues(alpha: 0.4),
+                                                blurRadius: 12,
+                                              )
+                                            ]
+                                          : [],
+                                    ),
+                                    child: Image.asset(
+                                      mood['path']!,
+                                      height: 45,
+                                      width: 45,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 25),
+
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: AppColors.forest,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Peace comes from within, Do not seek it without",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                         
+                          _buildFeatureCard(
+                            title: "How was your day?",
+                            buttonText: "Write Journal",
+                            image: 'assets/images/journal.png',
+                            onTap: () => Navigator.of(context).pushNamed('/journal'),
+                          ),
+                          _buildFeatureCard(
+                            title: "Unlock your inner peace",
+                            buttonText: "Meditate",
+                            image: 'assets/images/meditation.png',
+                            onTap: () => Navigator.of(context).pushNamed('/meditate'),
+                          ),
+                          _buildFeatureCard(
+                            title: "Talk to your buddy",
+                            buttonText: "Talk",
+                            image: 'assets/images/chatbot.png',
+                            onTap: () => Navigator.of(context).pushNamed('/chatbot'),
+                          ),
+
+                          const SizedBox(height: 100),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      
+    );
+  }
+
+  Widget _buildFeatureCard({
+    required String title,
+    required String buttonText,
+    required String image,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      height: 170,
+      decoration: BoxDecoration(
+        color: AppColors.sage.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.black,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.softCoral,
+                          AppColors.peach,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.softCoral.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        )
+                      ],
+                    ),
+                    child: Text(
+                      buttonText,
+                      style: GoogleFonts.poppins(
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            flex: 1,
+            child: Image.asset(image, height: 140),
+          ),
+        ],
       ),
     );
   }
