@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'src/ui/screens/chatbot.dart';           // ← Your Chatbot page
-import 'src/ui/screens/journal_page.dart';       // ← ADDED: Journal page import
 import 'src/utils/app_colors.dart';
 import 'src/ui/screens/main_page.dart';
+import 'src/ui/screens/splash_screen.dart';
+import 'src/ui/screens/auth_screen.dart';
+import 'src/ui/screens/onboarding_screen.dart';
 
 void main() {
   runApp(const SoulSpaceApp());
@@ -56,55 +56,3 @@ class SoulSpaceApp extends StatelessWidget {
   }
 }
 
-// Quick home screen to test both pages instantly
-class QuickTestHome extends StatelessWidget {
-  const QuickTestHome({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "SoulSpace\nTesting",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 80),
-
-              // Go to Chatbot
-              ElevatedButton.icon(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const Chatbot())),
-                icon: const Icon(Icons.smart_toy, size: 32),
-                label: const Text("Chat with Joy", style: TextStyle(fontSize: 20)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.lightPink,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              // Go to Journal
-              ElevatedButton.icon(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const JournalPage())),
-                icon: const Icon(Icons.book, size: 32),
-                label: const Text("Journal", style: TextStyle(fontSize: 20)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.sage,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

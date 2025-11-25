@@ -6,9 +6,7 @@ import 'package:soulspace/src/ui/screens/calm_page.dart';
 import 'package:soulspace/src/ui/screens/focus_page.dart';
 import '../../utils/app_colors.dart';
 
-// ←←← YOUR REAL PAGES (make sure these exist in your project)
 import 'breathing_page.dart';           // ← contains BreathingPage
-    // ← contains GentleStretchPage
 
 class InsightsPage extends StatelessWidget {
   const InsightsPage({super.key});
@@ -63,7 +61,7 @@ class InsightsPage extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Text("Calm", style: TextStyle(fontSize: 78)),
+                        const Text("Calm", style: TextStyle(fontSize: 32)),
                         const SizedBox(width: 24),
                         Expanded(
                           child: Column(

@@ -4,7 +4,8 @@ import 'meditation_page.dart';
 import '../widgets/custom_navbar.dart';
 import '../../utils/app_colors.dart';
 import 'insights_page.dart';
-
+import  'journal_page.dart';
+import  'chatbot.dart';
 
 class MainPage extends StatefulWidget {
   final String username;
@@ -30,10 +31,10 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _pages.addAll([
-      withNavPadding(const Placeholder()), 
+      withNavPadding(const Chatbot()), 
       withNavPadding(const MeditationPage()), 
       withNavPadding(HomeScreen(username: widget.username)), 
-      withNavPadding(const Placeholder()), 
+      withNavPadding(const JournalPage()), 
       withNavPadding(const InsightsPage()), 
     ]);
   }
