@@ -1,5 +1,6 @@
 // src/ui/screens/chatbot.dart
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../utils/app_colors.dart';
 
 class Chatbot extends StatefulWidget {
@@ -12,7 +13,6 @@ class Chatbot extends StatefulWidget {
 class _ChatbotState extends State<Chatbot> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-
   final List<Map<String, dynamic>> _messages = [];
 
   void _scrollToBottom() {
@@ -38,11 +38,10 @@ class _ChatbotState extends State<Chatbot> {
     });
     _scrollToBottom();
 
-    // Simulate AI response
     Future.delayed(const Duration(milliseconds: 800), () {
       setState(() {
         _messages.add({
-          'text': "Thanks for sharing! I'm here to help",
+          'text': "Thanks for sharing! I'm here to help ❤️",
           'isUser': false,
         });
       });
@@ -56,51 +55,42 @@ class _ChatbotState extends State<Chatbot> {
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ---------------- HEADER ----------------
+            // HEADER — EXACT SAME STYLE AS MEDITATION PAGE
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Back Button
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: AppColors.lightPink,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.arrow_back, color: Colors.black),
-                  ),
-                  const SizedBox(width: 16),
-
-                  // Title
-                  const Expanded(
-                    child: Text(
-                      "Chat with Joy",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  // Main Title - Left aligned, bold, Poppins
+                  Text(
+                    "Chat with Joy",
+                    style: GoogleFonts.poppins(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.black,
                     ),
                   ),
-
-                  const SizedBox(width: 16),
-                  const Icon(Icons.auto_awesome, color: Colors.black54),
+                  const SizedBox(height: 8),
+                  // Subtitle - just like "Choose a session to begin"
+                  
                 ],
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 20),
 
-            // ---------------- MESSAGES AREA ----------------
+            // MESSAGES AREA
             Expanded(
               child: _messages.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         "Start your conversation with Joy",
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     )
                   : ListView.builder(
@@ -114,14 +104,13 @@ class _ChatbotState extends State<Chatbot> {
                     ),
             ),
 
-            // ---------------- INPUT AREA WITH BEAR HOLDING THE BOX ----------------
+            // INPUT AREA WITH BEAR
             Stack(
               alignment: Alignment.topCenter,
               children: [
-                // INPUT BOX
                 Container(
-                  margin: const EdgeInsets.only(top: 80), // Space for bear
-                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 32), // Extra top padding
+                  margin: const EdgeInsets.only(top: 80),
+                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 32),
                   decoration: const BoxDecoration(
                     color: AppColors.lightPink,
                     borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
@@ -172,13 +161,13 @@ class _ChatbotState extends State<Chatbot> {
                   ),
                 ),
 
-                // CUTE BEAR HOLDING THE TEXT BOX
-               Positioned(
+                // BEAR HOLDING THE BOX
+                Positioned(
                   top: -100,
-                  right: 20, // Moved to right side
+                  right: 20,
                   child: Image.asset(
-                    "assets/images/chatbot.png", // Your bear image
-                    width: 120, // Smaller size
+                    "assets/images/Teddy.png",
+                    width: 120,
                     height: 300,
                     fit: BoxFit.contain,
                   ),
@@ -191,7 +180,6 @@ class _ChatbotState extends State<Chatbot> {
     );
   }
 
-  // User Message (Right Side)
   Widget _userMessage(String msg) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -221,7 +209,6 @@ class _ChatbotState extends State<Chatbot> {
     );
   }
 
-  // Bot Message (Left Side)
   Widget _botMessage(String msg) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -241,7 +228,9 @@ class _ChatbotState extends State<Chatbot> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(22),
-                
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 6, offset: const Offset(1, 3)),
+                ],
               ),
               child: Text(msg, style: const TextStyle(fontSize: 16, color: Colors.black87)),
             ),
