@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:ui';
 import '../../utils/app_colors.dart';
+import 'setting_page.dart';
+import 'journal_page.dart';        
+import 'meditation_page.dart';    
+import 'chatbot.dart';     
 
 class HomeScreen extends StatefulWidget {
   final String username;
@@ -14,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedMood = "";
 
   final List<String> weekdays = ["S", "M", "T", "W", "T", "F", "S"];
-  final int currentWeekday = DateTime.now().weekday; 
+  final int currentWeekday = DateTime.now().weekday;
 
   final List<Map<String, String>> moodEmojis = [
     {'name': 'happy', 'path': 'assets/images/happy.png'},
@@ -47,19 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Opacity(
               opacity: 0.9,
               child: Image.asset(
-                'assets/images/bg.jpg',
+                'assets/images/bg.jpeg',
                 fit: BoxFit.cover,
               ),
             ),
           ),
-
           SafeArea(
             child: Column(
               children: [
-                
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -68,20 +70,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushNamed('/profile');
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => const SettingsPage()),
+                              );
                             },
                             child: const CircleAvatar(
                               radius: 26,
-                              backgroundImage:
-                                  AssetImage('assets/images/avatar.png'),
+                              backgroundImage: AssetImage('assets/images/avatar.png'),
                             ),
                           ),
-                          Icon(Icons.calendar_today_outlined,
-                              color: AppColors.black, size: 22),
+                          Icon(Icons.calendar_today_outlined, color: AppColors.black, size: 22),
                         ],
                       ),
                       const SizedBox(height: 18),
-
                       Text(
                         "Hi, ${widget.username}!",
                         style: GoogleFonts.poppins(
@@ -101,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -111,8 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 10),
-
-                         
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: List.generate(7, (index) {
@@ -130,8 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Text(
                                   weekdays[index],
                                   style: GoogleFonts.poppins(
-                                    fontWeight:
-                                        isToday ? FontWeight.w600 : FontWeight.w400,
+                                    fontWeight: isToday ? FontWeight.w600 : FontWeight.w400,
                                     color: AppColors.black,
                                   ),
                                 ),
@@ -139,8 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             }),
                           ),
                           const SizedBox(height: 20),
-
-
                           SizedBox(
                             height: 65,
                             child: ListView.separated(
@@ -160,8 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       boxShadow: isSelected
                                           ? [
                                               BoxShadow(
-                                                color: AppColors.forest.withValues(alpha: 0.4),
-                                                blurRadius: 12,
+                                                color: const Color(0xFFFCEBBE).withValues(alpha: 0.6),
+                                                blurRadius: 16,
+                                                spreadRadius: 4,
                                               )
                                             ]
                                           : [],
@@ -178,48 +174,36 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 25),
 
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: AppColors.forest,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Peace comes from within, Do not seek it without",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ),
+                          _buildQuoteCard(
+                            quote: "Peace comes from within. Do not seek it without.",
+                            author: "Buddha",
                           ),
                           const SizedBox(height: 20),
 
-                         
                           _buildFeatureCard(
                             title: "How was your day?",
                             buttonText: "Write Journal",
                             image: 'assets/images/journal.png',
-                            onTap: () => Navigator.of(context).pushNamed('/journal'),
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const JournalPage()), 
+                            ),
                           ),
                           _buildFeatureCard(
                             title: "Unlock your inner peace",
                             buttonText: "Meditate",
-                            image: 'assets/images/meditation.png',
-                            onTap: () => Navigator.of(context).pushNamed('/meditate'),
+                            image: 'assets/images/onboarding2.png',
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const MeditationPage()), 
+                            ),
                           ),
                           _buildFeatureCard(
                             title: "Talk to your buddy",
                             buttonText: "Talk",
                             image: 'assets/images/chatbot.png',
-                            onTap: () => Navigator.of(context).pushNamed('/chatbot'),
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const Chatbot()), 
+                            ),
                           ),
-
                           const SizedBox(height: 100),
                         ],
                       ),
@@ -231,7 +215,50 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      
+    );
+  }
+
+  Widget _buildQuoteCard({required String quote, required String author}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Column(
+            children: [
+              Text(
+                '"$quote"',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.greatVibes(
+                  fontSize: 28,
+                  color: AppColors.black.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '- $author',
+                textAlign: TextAlign.right,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: AppColors.black.withValues(alpha: 0.6),
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -243,71 +270,96 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       height: 170,
-      decoration: BoxDecoration(
-        color: AppColors.sage.withValues(alpha: 0.95),
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(22),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.black,
-                  ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                color: AppColors.lightPink,
+              ),
+            ),
+            Positioned(
+              bottom: -30,
+              right: -30,
+              child: Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(
+                  color: AppColors.warmPink.withValues(alpha: 0.5),
+                  shape: BoxShape.circle,
                 ),
-                const SizedBox(height: 12),
-                GestureDetector(
-                  onTap: onTap,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.softCoral,
-                          AppColors.peach,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.softCoral.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        )
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        GestureDetector(
+                          onTap: onTap,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFFA5C85B),
+                                  Color(0xFFD3E281),
+                                  Color(0xFFF5B1AC),
+                                  Color(0xFFFCEBE7),
+                                  Color(0xFFFCEBBE),
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xFFD3E281).withValues(alpha: 0.4),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                )
+                              ],
+                            ),
+                            child: Text(
+                              buttonText,
+                              style: GoogleFonts.poppins(
+                                color: const Color(0xFF2E4F2E),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    child: Text(
-                      buttonText,
-                      style: GoogleFonts.poppins(
-                        color: AppColors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                      ),
-                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: Image.asset(image, height: 200, width: 120),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            flex: 1,
-            child: Image.asset(image, height: 140),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

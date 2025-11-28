@@ -35,7 +35,7 @@ class _CalmPageState extends State<CalmPage> {
   void initState() {
     super.initState();
     _setupListeners();
-    _loadTrack(tracks[0]); // ← Load first track on open (but don't play)
+    _loadTrack(tracks[0]); 
   }
 
   void _setupListeners() {
@@ -57,7 +57,6 @@ class _CalmPageState extends State<CalmPage> {
       setState(() => position = p);
     });
 
-    // Remove auto-next → meditations should STOP when finished
     _audioPlayer.onPlayerComplete.listen((_) {
       if (!mounted) return;
       setState(() => isPlaying = false);
@@ -77,7 +76,7 @@ class _CalmPageState extends State<CalmPage> {
     try {
       await _audioPlayer.stop();
       await _audioPlayer.setSource(AssetSource(track.assetPath));
-      await _audioPlayer.setReleaseMode(ReleaseMode.stop); // No loop
+      await _audioPlayer.setReleaseMode(ReleaseMode.stop); 
     } 
     finally {
       if (mounted) setState(() => isLoading = false);
@@ -138,7 +137,6 @@ class _CalmPageState extends State<CalmPage> {
           SafeArea(
             child: Column(
               children: [
-                // Header
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -158,7 +156,6 @@ class _CalmPageState extends State<CalmPage> {
                 ),
                 const SizedBox(height: 10),
 
-                // Track List
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -206,7 +203,6 @@ class _CalmPageState extends State<CalmPage> {
                   ),
                 ),
 
-                // Bottom Player
                 Container(
                   padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
                   decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: const BorderRadius.vertical(top: Radius.circular(32))),

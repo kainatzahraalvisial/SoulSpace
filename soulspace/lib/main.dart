@@ -55,4 +55,3 @@ class SoulSpaceApp extends StatelessWidget {
     );
   }
 }
-

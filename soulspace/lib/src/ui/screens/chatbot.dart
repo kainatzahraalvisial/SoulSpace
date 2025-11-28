@@ -57,13 +57,11 @@ class _ChatbotState extends State<Chatbot> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // HEADER — EXACT SAME STYLE AS MEDITATION PAGE
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Main Title - Left aligned, bold, Poppins
                   Text(
                     "Chat with Joy",
                     style: GoogleFonts.poppins(
@@ -73,7 +71,6 @@ class _ChatbotState extends State<Chatbot> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  // Subtitle - just like "Choose a session to begin"
                   
                 ],
               ),
@@ -81,7 +78,6 @@ class _ChatbotState extends State<Chatbot> {
 
             const SizedBox(height: 20),
 
-            // MESSAGES AREA
             Expanded(
               child: _messages.isEmpty
                   ? Center(
@@ -104,7 +100,6 @@ class _ChatbotState extends State<Chatbot> {
                     ),
             ),
 
-            // INPUT AREA WITH BEAR
             Stack(
               alignment: Alignment.topCenter,
               children: [
@@ -161,7 +156,6 @@ class _ChatbotState extends State<Chatbot> {
                   ),
                 ),
 
-                // BEAR HOLDING THE BOX
                 Positioned(
                   top: -100,
                   right: 20,

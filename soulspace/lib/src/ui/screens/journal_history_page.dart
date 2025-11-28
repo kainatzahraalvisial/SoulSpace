@@ -1,4 +1,3 @@
-// src/ui/screens/journal_history_page.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,7 +9,6 @@ class WaveClipper extends CustomClipper<Path> {
     double height = size.height;
     double archHeight = 90.0;
 
-    // Creates a wave that curves DOWNWARD
     path.moveTo(0, 0);
     path.lineTo(0, height - archHeight);
     path.quadraticBezierTo(width / 2, height, width, height - archHeight);
@@ -61,7 +59,6 @@ class JournalHistoryPage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // BEAUTIFUL WAVE BANNER — ROUNDED SIDE FACING DOWNWARD
             Positioned(
               top: 0,
               left: 0,
@@ -85,10 +82,8 @@ class JournalHistoryPage extends StatelessWidget {
               ),
             ),
 
-            // MAIN CONTENT
             Column(
               children: [
-                // Header
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                   child: Row(
@@ -116,7 +111,6 @@ class JournalHistoryPage extends StatelessWidget {
 
                 const SizedBox(height: 30),
 
-                // Girl Illustration — BEAUTIFULLY CENTERED ON THE WAVE
                 Image.asset(
                   "assets/images/history.png",
                   width: 220,
@@ -125,7 +119,6 @@ class JournalHistoryPage extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
-                // Past Entries — ROUNDED CARDS
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 20),

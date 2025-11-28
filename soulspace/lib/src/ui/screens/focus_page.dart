@@ -96,7 +96,6 @@ class _FocusPageState extends State<FocusPage> {
     if (isPlaying) {
       await _audioPlayer.pause();
     } else {
-      // This line fixes the "first play doesn't work" bug
       await _audioPlayer.play(AssetSource(tracks[currentIndex].asset));
     }
   }

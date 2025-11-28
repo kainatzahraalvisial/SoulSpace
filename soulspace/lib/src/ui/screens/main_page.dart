@@ -50,11 +50,11 @@ class _MainPageState extends State<MainPage> {
 Positioned.fill(
   child: _currentIndex == 2
       ? Image.asset(
-          'assets/images/bg.jpg',
+          'assets/images/bg.jpeg',
           fit: BoxFit.cover,
         )
       : Container(
-          color: AppColors.lightBackground, 
+          color: AppColors.white, 
         ),
 ),
 
