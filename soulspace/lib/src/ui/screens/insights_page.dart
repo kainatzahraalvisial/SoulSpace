@@ -433,7 +433,7 @@ class _InsightsPageState extends State<InsightsPage> {
         top: -15,
         right: 20, 
         child: Image.asset(
-          'assets/images/teddy.png',
+          'assets/images/Teddy.png',
           height: 110,
         ),
       ),

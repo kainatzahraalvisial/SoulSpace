@@ -52,55 +52,65 @@ class _JournalPageState extends State<JournalPage> {
       backgroundColor: AppColors.white.withValues(alpha: 0.98),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 40),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Text("Journal", style: GoogleFonts.poppins(fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.black)),
-                const SizedBox(height: 8),
-                Text("Take a moment to reflect on your day", style: GoogleFonts.poppins(fontSize: 17, color: AppColors.lightBlack.withValues(alpha: 0.7), fontWeight: FontWeight.w500)),
-                const SizedBox(height: 32),
-
-                TextField(controller: _titleController, style: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w700), 
-                  decoration: InputDecoration(hintText: "Title", hintStyle: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w600, color: Colors.grey.shade400), border: InputBorder.none)),
-                const SizedBox(height: 8),
-                Text(today, style: GoogleFonts.poppins(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black54)),
-                const SizedBox(height: 20),
-
-                Container(
-                  height: 420,
-                  padding: const EdgeInsets.fromLTRB(28, 36, 28, 60),
-                  decoration: BoxDecoration(color: const Color(0xFFFFFDF6), borderRadius: BorderRadius.circular(28), border: Border.all(color: const Color(0xFFE8D9C5).withValues(alpha: 0.7), width: 2),
-                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, offset: const Offset(0, 8))]),
-                  child: Stack(children: [
-                    Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: NotebookLinesPainter()))),
-                    TextField(controller: _journalController, maxLines: null, cursorWidth: 1.8, cursorColor: AppColors.sage, cursorHeight: 24,
-                      style: GoogleFonts.poppins(fontSize: 17, height: 2.6, color: AppColors.black.withValues(alpha: 0.88), fontWeight: FontWeight.w500),
-                      decoration: InputDecoration(hintText: "Start writing here...", hintStyle: GoogleFonts.poppins(fontSize: 17, color: Colors.grey.shade400), border: InputBorder.none, contentPadding: EdgeInsets.zero)),
-                  ]),
-                ),
-
-                const SizedBox(height: 40),
-
-                
-                Row(children: [
-                  Expanded(child: _filledGradientButton(text: "Save Entry")),
-                  const SizedBox(width: 16),
-                  Expanded(child: _gradientBorderOnlyButton(text: "Analyze with AI", onTap: _showAIAnalysis)),
-                ]),
-
-                const SizedBox(height: 24),
-
-                _filledGradientButton(text: "View Your Past Entries", onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const JournalHistoryPage()))),
-
-                const SizedBox(height: 80),
-              ],
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Journal", style: GoogleFonts.poppins(fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.black)),
+                  const SizedBox(height: 8),
+                  Text("Take a moment to reflect on your day", style: GoogleFonts.poppins(fontSize: 17, color: AppColors.lightBlack.withValues(alpha: 0.7), fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 32),
+                  TextField(controller: _titleController, style: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w700), 
+                    decoration: InputDecoration(hintText: "Title", hintStyle: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.w600, color: Colors.grey.shade400), border: InputBorder.none)),
+                  const SizedBox(height: 8),
+                  Text(today, style: GoogleFonts.poppins(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black54)),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-          ),
+
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 40),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 420,
+                        padding: const EdgeInsets.fromLTRB(28, 36, 28, 60),
+                        decoration: BoxDecoration(color: const Color(0xFFFFFDF6), borderRadius: BorderRadius.circular(28), border: Border.all(color: const Color(0xFFE8D9C5).withValues(alpha: 0.7), width: 2),
+                          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, offset: const Offset(0, 8))]),
+                        child: Stack(children: [
+                          Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: NotebookLinesPainter()))),
+                          TextField(controller: _journalController, maxLines: null, cursorWidth: 1.8, cursorColor: AppColors.sage, cursorHeight: 24,
+                            style: GoogleFonts.poppins(fontSize: 17, height: 2.6, color: AppColors.black.withValues(alpha: 0.88), fontWeight: FontWeight.w500),
+                            decoration: InputDecoration(hintText: "Start writing here...", hintStyle: GoogleFonts.poppins(fontSize: 17, color: Colors.grey.shade400), border: InputBorder.none, contentPadding: EdgeInsets.zero)),
+                        ]),
+                      ),
+
+                      const SizedBox(height: 40),
+
+                      Row(children: [
+                        Expanded(child: _filledGradientButton(text: "Save Entry")),
+                        const SizedBox(width: 16),
+                        Expanded(child: _gradientBorderOnlyButton(text: "Analyze with AI", onTap: _showAIAnalysis)),
+                      ]),
+
+                      const SizedBox(height: 24),
+
+                      _filledGradientButton(text: "View Your Past Entries", onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const JournalHistoryPage()))),
+
+                      const SizedBox(height: 80),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
